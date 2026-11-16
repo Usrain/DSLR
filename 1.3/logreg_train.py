@@ -45,12 +45,30 @@ def Z_score(dataset : dict, key : str) -> list[float]:
         z_scores.append(z)
     return z_scores
 
+def sigmoid(z):
+    if z < -500:
+        return 0.0
+    return 1.0 / (1.0 + math.exp(-z))
+
 
 def lr(dataset : dict, learning_rate : float, epoch : int):
     features = [k for k in dataset.keys() if k != "Hogwarts House"]
     weights = [0.0] * len(features)
     bias = 0.0
-    for i in range(0, epoch):
+    result = 0
+    nb_students = len(dataset[features[0]])
+    for epoch_idx in range(epoch):
+        for s in range(nb_students):
+            prediction = bias 
+            j = 0
+            while j < len(features):
+                feature_name = features[j]
+                note = dataset[feature_name][s]
+                prediction += note * weights[j]
+                j += 1
+            sigmoid_prediction = sigmoid(prediction)
+            result = result + (sigmoid_prediction - dataset["Hogwarts House"][s])
+
 
 
 def main():
@@ -114,7 +132,7 @@ def main():
                 if header == "Hogwarts House":
                     continue
                 dataset.pop(header, None)
-        print(dataset["Hogwarts House"])
+        print(dataset)
         
     except FileNotFoundError as e:
         print ("file does not exist", e)
